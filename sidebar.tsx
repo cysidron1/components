@@ -5,12 +5,12 @@ import type { CSSObject, DrawerProps as MuiDrawerProps, Theme } from '@mui/mater
 import { Drawer, styled, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import { ZTooltip } from '@zoox/ops-ui';
+import { Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { TriggerTwilioTask } from '../../components/TriggerTwilioTask';
-import { AppBar } from '../AppBar';
+import { AppBar } from '@mui/appbar';
 import { Versions } from '../AppShell/Versions';
 import { PageNavigation } from '../PageNavigation';
 
@@ -40,7 +40,7 @@ const defaultClosedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
-interface ZSidebarProps extends MuiDrawerProps {
+interface SidebarProps extends MuiDrawerProps {
   openedMixin?: (theme: Theme) => CSSObject;
   closedMixin?: (theme: Theme) => CSSObject;
   togglekeybind?: string;
@@ -48,7 +48,7 @@ interface ZSidebarProps extends MuiDrawerProps {
 
 export const CollapsibleSidebar = styled(Drawer, {
   shouldForwardProp: (prop) => prop !== 'open',
-})<ZSidebarProps>(
+})<SidebarProps>(
   ({ theme, open, openedMixin = defaultOpenedMixin, closedMixin = defaultClosedMixin }) => ({
     width: defaultDrawerOpenedWidth,
     flexShrink: 0,
@@ -60,7 +60,7 @@ export const CollapsibleSidebar = styled(Drawer, {
   })
 );
 
-export function ZSidebar(props: ZSidebarProps) {
+export function Sidebar(props: SidebarProps) {
   const { togglekeybind = 'c' } = props;
   const storedOpen = localStorage.getItem('sidebarOpen');
   const initialOpen = storedOpen ? JSON.parse(storedOpen) : true;
@@ -93,10 +93,9 @@ export function ZSidebar(props: ZSidebarProps) {
     <div>
       <Box>
         <CollapsibleSidebar variant="permanent" open={open} togglekeybind={togglekeybind}>
-          <PageNavigation sx={{ flex: '1' }} open={open} title="RiderDash" />
+          <PageNavigation sx={{ flex: '1' }} open={open} title="App" />
           <Box>
             <div>
-              {open ? <TriggerTwilioTask /> : null}
               <div
                 css={{
                   display: 'flex',
@@ -108,19 +107,19 @@ export function ZSidebar(props: ZSidebarProps) {
                 {open ? (
                   <Versions />
                 ) : (
-                  <ZTooltip title={<Versions />} arrow placement="right">
+                  <Tooltip title={<Versions />} arrow placement="right">
                     <InfoOutlinedIcon sx={{ color: palette.secondary.light }} fontSize="small" />
-                  </ZTooltip>
+                  </Tooltip>
                 )}
                 <IconButton onClick={closeSidebar} sx={{ color: palette.secondary.light }}>
                   {!open ? (
-                    <ZTooltip title="Expand Menu (C)" arrow placement="right">
+                    <Tooltip title="Expand Menu (C)" arrow placement="right">
                       <ChevronRightIcon />
-                    </ZTooltip>
+                    </Tooltip>
                   ) : (
-                    <ZTooltip title="Collapse Menu (C)" arrow placement="right">
+                    <Tooltip title="Collapse Menu (C)" arrow placement="right">
                       <ChevronLeftIcon />
-                    </ZTooltip>
+                    </Tooltip>
                   )}
                 </IconButton>
               </div>
